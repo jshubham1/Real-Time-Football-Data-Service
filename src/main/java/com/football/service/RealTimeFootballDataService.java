@@ -1,11 +1,11 @@
-package com.football.footballstanding.service;
+package com.football.service;
 
-import com.football.footballstanding.domain.Standing;
+import com.football.domain.Standing;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface FootBallStandingService {
+public interface RealTimeFootballDataService {
     List<Standing> getStandings(Integer leagueId, Optional<String> countryName, Optional<String> teamName);
 
     Object getLiveScore();

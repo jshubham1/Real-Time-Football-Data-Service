@@ -1,10 +1,10 @@
-package com.football.footballstanding;
+package com.football;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class FootballStandingApplicationTests {
+class RealTimeFootballDataApplicationTests {
 
     @Test
     void contextLoads() {

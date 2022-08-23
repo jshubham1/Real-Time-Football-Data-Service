@@ -1,10 +1,10 @@
-package com.football.footballstanding.exception.advice;
+package com.football.exception.advice;
 
-import com.football.footballstanding.domain.ErrorModel;
-import com.football.footballstanding.exception.AuthenticationFailureException;
-import com.football.footballstanding.exception.FootballStandingException;
-import com.football.footballstanding.exception.NoDataFoundException;
-import com.football.footballstanding.exception.NoDataFoundForTheFilterException;
+import com.football.domain.ErrorModel;
+import com.football.exception.AuthenticationFailureException;
+import com.football.exception.NoDataFoundException;
+import com.football.exception.NoDataFoundForTheFilterException;
+import com.football.exception.RealTimeFootballDataException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +35,8 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(getErrorModel(HttpStatus.UNAUTHORIZED, ex.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(FootballStandingException.class)
-    public ResponseEntity<Object> handleFootballStandingException(AuthenticationFailureException ex,
+    @ExceptionHandler(RealTimeFootballDataException.class)
+    public ResponseEntity<Object> handleRealTimeFootballDataException(AuthenticationFailureException ex,
         WebRequest request) {
         return new ResponseEntity<>(getErrorModel(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage()),
             HttpStatus.INTERNAL_SERVER_ERROR);

@@ -1,11 +1,11 @@
-package com.football.footballstanding.service;
+package com.football.service;
 
-import com.football.footballstanding.domain.Standing;
-import com.football.footballstanding.exception.AuthenticationFailureException;
-import com.football.footballstanding.exception.FootballStandingException;
-import com.football.footballstanding.exception.NoDataFoundException;
-import com.football.footballstanding.exception.NoDataFoundForTheFilterException;
-import com.football.footballstanding.feign.client.FootballApiClient;
+import com.football.domain.Standing;
+import com.football.exception.AuthenticationFailureException;
+import com.football.exception.NoDataFoundException;
+import com.football.exception.NoDataFoundForTheFilterException;
+import com.football.exception.RealTimeFootballDataException;
+import com.football.feign.client.FootballApiClient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,17 +26,17 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class FootBallStandingServiceImplTest {
+class RealTimeFootballDataServiceImplTest {
 
     @InjectMocks
-    FootBallStandingServiceImpl footBallStandingService;
+    RealTimeFootballDataServiceImpl footBallStandingService;
 
     @Mock
     FootballApiClient footballApiClient;
 
     @BeforeEach
     void setUp() {
-        footBallStandingService = new FootBallStandingServiceImpl("XXXXX", footballApiClient);
+        footBallStandingService = new RealTimeFootballDataServiceImpl("XXXXX", footballApiClient);
     }
 
     @Test
@@ -63,7 +63,7 @@ class FootBallStandingServiceImplTest {
     public void shouldThrowNoDataFoundForTheFilterException() {
         List<Standing> expectedStandings = getExpectedStandings();
         when(footballApiClient.getStandings(eq("get_standings"), eq(100), eq("XXXXX"))).thenReturn(expectedStandings);
-        assertThrows(NoDataFoundForTheFilterException.class,
+        Assertions.assertThrows(NoDataFoundForTheFilterException.class,
             () -> footBallStandingService.getStandings(100, Optional.of("RANDOM_COUNTRY"), Optional.of("TEAM")),
             String.format("No standings for the league id - %d, countryName - %s and teamName - %s", 100,
                 "RANDOM_COUNTRY", "TEAM"));
@@ -74,7 +74,7 @@ class FootBallStandingServiceImplTest {
     public void shouldThrowNoDataFoundException() {
         LinkedHashMap invalidResponse = getInvalidResponse("400", "No league found (please check your plan)!!");
         when(footballApiClient.getStandings(eq("get_standings"), eq(100), eq("XXXXX"))).thenReturn(invalidResponse);
-        assertThrows(NoDataFoundException.class,
+        Assertions.assertThrows(NoDataFoundException.class,
             () -> footBallStandingService.getStandings(100, Optional.ofNullable(null), Optional.ofNullable(null)),
             String.format("No league found for the id %d (please check your plan or the league id)", 100));
         verify(footballApiClient, times(1)).getStandings(eq("get_standings"), eq(100), eq("XXXXX"));
@@ -84,7 +84,7 @@ class FootBallStandingServiceImplTest {
     public void shouldThrowAuthenticationFailureException() {
         LinkedHashMap invalidResponse = getInvalidResponse("401", "Authentification failed!");
         when(footballApiClient.getStandings(eq("get_standings"), eq(100), eq("XXXXX"))).thenReturn(invalidResponse);
-        assertThrows(AuthenticationFailureException.class,
+        Assertions.assertThrows(AuthenticationFailureException.class,
             () -> footBallStandingService.getStandings(100, Optional.ofNullable(null), Optional.ofNullable(null)),
             "Authentication failed! Invalid API key, please check your API Key");
         verify(footballApiClient, times(1)).getStandings(eq("get_standings"), eq(100), eq("XXXXX"));
@@ -93,7 +93,7 @@ class FootBallStandingServiceImplTest {
     @Test
     public void shouldThrowFootballStandingException() {
         when(footballApiClient.getStandings(eq("get_standings"), eq(100), eq("XXXXX"))).thenReturn(null);
-        assertThrows(FootballStandingException.class,
+        Assertions.assertThrows(RealTimeFootballDataException.class,
             () -> footBallStandingService.getStandings(100, Optional.ofNullable(null), Optional.ofNullable(null)),
             "Received empty response from the Football API server");
         verify(footballApiClient, times(1)).getStandings(eq("get_standings"), eq(100), eq("XXXXX"));
@@ -103,7 +103,7 @@ class FootBallStandingServiceImplTest {
     public void shouldThrowFootballStandingExceptionWhenApiIsDown() {
         when(footballApiClient.getStandings(eq("get_standings"), eq(100), eq("XXXXX"))).thenThrow(
             new RuntimeException("ERROR"));
-        assertThrows(FootballStandingException.class,
+        assertThrows(RealTimeFootballDataException.class,
             () -> footBallStandingService.getStandings(100, Optional.ofNullable(null), Optional.ofNullable(null)),
             "Oops! Something went wrong, we are working on it please try again after sometime. Detailed Exception - " +
                 "ERROR");

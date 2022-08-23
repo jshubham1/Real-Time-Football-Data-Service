@@ -1,8 +1,10 @@
-package com.football.footballstanding.controller;
+package com.football.controller;
 
-import com.football.footballstanding.domain.ErrorModel;
-import com.football.footballstanding.domain.Standing;
-import com.football.footballstanding.service.FootBallStandingService;
+import com.football.constant.Constants;
+import com.football.constant.UrlConfig;
+import com.football.domain.ErrorModel;
+import com.football.domain.Standing;
+import com.football.service.RealTimeFootballDataService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,21 +24,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
-import static com.football.footballstanding.constant.Constants.PLAYER_NAME;
-import static com.football.footballstanding.constant.Constants.REQUEST_PARAM_LEAGUE_ID;
-import static com.football.footballstanding.constant.UrlConfig.GET_LIVE_SCORE;
-import static com.football.footballstanding.constant.UrlConfig.GET_PLAYER_DETAILS;
-import static com.football.footballstanding.constant.UrlConfig.GET_STANDINGS;
-import static com.football.footballstanding.constant.UrlConfig.REST_API;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-@RestController(REST_API)
+@RestController(UrlConfig.REST_API)
 @Slf4j
 @RequiredArgsConstructor
 public class FootballController {
 
-    private final FootBallStandingService footBallStandingService;
+    private final RealTimeFootballDataService realTimeFootballDataService;
 
     @Operation(description = "Gets the list of all the standing for a league id")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Success"),
@@ -46,13 +42,13 @@ public class FootballController {
             content = @Content(schema = @Schema(implementation = ErrorModel.class))),
         @ApiResponse(responseCode = "500", description = "Internal Server Error",
             content = @Content(schema = @Schema(implementation = ErrorModel.class)))})
-    @GetMapping(value = GET_STANDINGS, produces = {"application/hal+json"})
+    @GetMapping(value = UrlConfig.GET_STANDINGS, produces = {"application/hal+json"})
     public HttpEntity<CollectionModel<Standing>> getStandings(
-        @RequestParam(name = REQUEST_PARAM_LEAGUE_ID) Integer leagueId,
+        @RequestParam(name = Constants.REQUEST_PARAM_LEAGUE_ID) Integer leagueId,
         @RequestParam(name = "countryName") Optional<String> countryName,
         @RequestParam(name = "teamName") Optional<String> teamName) {
         log.info("FootballController: getStandings() called with league id - " + leagueId);
-        List<Standing> standings = footBallStandingService.getStandings(leagueId, countryName, teamName);
+        List<Standing> standings = realTimeFootballDataService.getStandings(leagueId, countryName, teamName);
         log.info("FootballController: getStandings() returning results - " + standings.size() + " for the league - " +
                      leagueId);
         return new ResponseEntity<>(addSelfLink(leagueId, countryName, teamName, standings), HttpStatus.OK);
@@ -66,10 +62,10 @@ public class FootballController {
             content = @Content(schema = @Schema(implementation = ErrorModel.class))),
         @ApiResponse(responseCode = "500", description = "Internal Server Error",
             content = @Content(schema = @Schema(implementation = ErrorModel.class)))})
-    @GetMapping(value = GET_LIVE_SCORE)
+    @GetMapping(value = UrlConfig.GET_LIVE_SCORE)
     public HttpEntity<Object> getLiveScore() {
         log.info("FootballController: getLiveScore() called");
-        return new ResponseEntity<>(footBallStandingService.getLiveScore(), HttpStatus.OK);
+        return new ResponseEntity<>(realTimeFootballDataService.getLiveScore(), HttpStatus.OK);
     }
 
     @Operation(description = "Gets player details")
@@ -80,10 +76,10 @@ public class FootballController {
             content = @Content(schema = @Schema(implementation = ErrorModel.class))),
         @ApiResponse(responseCode = "500", description = "Internal Server Error",
             content = @Content(schema = @Schema(implementation = ErrorModel.class)))})
-    @GetMapping(value = GET_PLAYER_DETAILS)
-    public HttpEntity<Object> getPlayerDetails(@RequestParam(name = PLAYER_NAME) String playerName) {
+    @GetMapping(value = UrlConfig.GET_PLAYER_DETAILS)
+    public HttpEntity<Object> getPlayerDetails(@RequestParam(name = Constants.PLAYER_NAME) String playerName) {
         log.info("FootballController: getPlayerDetails() called for player name as " + playerName);
-        return new ResponseEntity<>(footBallStandingService.getPlayerDetails(playerName), HttpStatus.OK);
+        return new ResponseEntity<>(realTimeFootballDataService.getPlayerDetails(playerName), HttpStatus.OK);
     }
 
     /**

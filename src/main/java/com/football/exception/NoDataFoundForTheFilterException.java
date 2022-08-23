@@ -1,4 +1,4 @@
-package com.football.footballstanding.exception;
+package com.football.exception;
 
 import java.util.Optional;
 

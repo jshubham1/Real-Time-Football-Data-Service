@@ -1,4 +1,4 @@
-package com.football.footballstanding.exception;
+package com.football.exception;
 
 public class AuthenticationFailureException extends RuntimeException {
     public AuthenticationFailureException() {

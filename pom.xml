@@ -9,11 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.football</groupId>
-    <artifactId>football-standing</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>football-standing</name>
-    <description>This is a Java 8 / Maven / Spring Boot that can provide football data of all
-        major leagues, countries and teams.
+    <artifactId>real-time-football-service</artifactId>
+    <version>1.0</version>
+    <name>real-time-football-service</name>
+    <description>This is a Java 8 / Maven / Spring Boot microservice which can provide real time football data
     </description>
     <properties>
         <java.version>1.8</java.version>

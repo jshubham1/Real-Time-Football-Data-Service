@@ -1,4 +1,4 @@
-package com.football.footballstanding.domain;
+package com.football.domain;
 
 import lombok.Builder;
 import lombok.Data;

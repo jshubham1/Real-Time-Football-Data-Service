@@ -1,4 +1,4 @@
-package com.football.footballstanding.domain;
+package com.football.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,7 +1,7 @@
-package com.football.footballstanding.exception;
+package com.football.exception;
 
-public class FootballStandingException extends RuntimeException {
-    public FootballStandingException(String exceptionMessage) {
+public class RealTimeFootballDataException extends RuntimeException {
+    public RealTimeFootballDataException(String exceptionMessage) {
         super(
             "Oops! Something went wrong, we are working on it please try again after sometime. Detailed Exception - " +
                 exceptionMessage);

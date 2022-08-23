@@ -1,4 +1,4 @@
-package com.football.footballstanding.constant;
+package com.football.constant;
 
 import lombok.experimental.UtilityClass;
 
