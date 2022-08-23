@@ -1,0 +1,20 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /football-standing
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      base-path: /_manage
+      exposure:
+        include: health, env, info
+
+football-api-service:
+  url: https://apiv3.apifootball.com/
+  api-key: 9eca0f7bfb9c866f07128e309f6c1d2ef4cab8c87bf6719d72fc8201b215dc36
+
+
