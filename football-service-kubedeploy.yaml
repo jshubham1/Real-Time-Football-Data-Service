@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hackathon-football-service-kube
+  name: hackathon-real-time-football-data-service-kube
 spec:
   replicas: 5
   selector:
     matchLabels:
-      app: hackathon-football-service-kube-app
+      app: hackathon-real-time-football-data-service-kube-app
   template:
     metadata:
       labels:
-        app: hackathon-football-service-kube-app
+        app: hackathon-real-time-football-data-service-kube-app
     spec:
       containers:
         - name: g-aks-c7-team9
-          image: hackathonteam9/football-service:tag
+          image: hackathonteam9/real-time-football-data-service:tag
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -23,10 +23,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: hackathon-football-service-kube-svc
+  name: hackathon-real-time-football-data-service-kube-svc
 spec:
   selector:
-    app: hackathon-football-service-kube-app
+    app: hackathon-real-time-football-data-service-kube-app
   ports:
     - protocol: TCP
       port: 8080
