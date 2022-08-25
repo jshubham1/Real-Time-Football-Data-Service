@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: hackathon-real-time-football-data-service-kube
 spec:
-  replicas: 5
+  replicas: 7
   selector:
     matchLabels:
       app: hackathon-real-time-football-data-service-kube-app
